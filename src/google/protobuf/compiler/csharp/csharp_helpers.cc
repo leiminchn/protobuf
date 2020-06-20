@@ -288,14 +288,18 @@ uint GetGroupEndTag(const Descriptor* descriptor) {
     const FieldDescriptor* field;
     for (int i = 0; i < containing_type->field_count(); i++) {
       field = containing_type->field(i);
-      if (field->type() == FieldDescriptor::Type::TYPE_GROUP && field->message_type() == descriptor) {
-        return internal::WireFormatLite::MakeTag(field->number(), internal::WireFormatLite::WIRETYPE_END_GROUP);
+      if (field->type() == FieldDescriptor::Type::TYPE_GROUP &&
+          field->message_type() == descriptor) {
+        return internal::WireFormatLite::MakeTag(
+            field->number(), internal::WireFormatLite::WIRETYPE_END_GROUP);
       }
     }
     for (int i = 0; i < containing_type->extension_count(); i++) {
       field = containing_type->extension(i);
-      if (field->type() == FieldDescriptor::Type::TYPE_GROUP && field->message_type() == descriptor) {
-        return internal::WireFormatLite::MakeTag(field->number(), internal::WireFormatLite::WIRETYPE_END_GROUP);
+      if (field->type() == FieldDescriptor::Type::TYPE_GROUP &&
+          field->message_type() == descriptor) {
+        return internal::WireFormatLite::MakeTag(
+            field->number(), internal::WireFormatLite::WIRETYPE_END_GROUP);
       }
     }
   } else {
@@ -304,8 +308,10 @@ uint GetGroupEndTag(const Descriptor* descriptor) {
       const FieldDescriptor* field;
       for (int i = 0; i < containing_file->extension_count(); i++) {
         field = containing_file->extension(i);
-        if (field->type() == FieldDescriptor::Type::TYPE_GROUP && field->message_type() == descriptor) {
-          return internal::WireFormatLite::MakeTag(field->number(), internal::WireFormatLite::WIRETYPE_END_GROUP);
+        if (field->type() == FieldDescriptor::Type::TYPE_GROUP &&
+            field->message_type() == descriptor) {
+          return internal::WireFormatLite::MakeTag(
+              field->number(), internal::WireFormatLite::WIRETYPE_END_GROUP);
         }
       }
     }
@@ -509,13 +515,13 @@ FieldGeneratorBase* CreateFieldGenerator(const FieldDescriptor* descriptor,
         }
       } else {
         if (IsWrapperType(descriptor)) {
-          if (descriptor->containing_oneof()) {
+          if (descriptor->real_containing_oneof()) {
             return new WrapperOneofFieldGenerator(descriptor, presenceIndex, options);
           } else {
             return new WrapperFieldGenerator(descriptor, presenceIndex, options);
           }
         } else {
-          if (descriptor->containing_oneof()) {
+          if (descriptor->real_containing_oneof()) {
             return new MessageOneofFieldGenerator(descriptor, presenceIndex, options);
           } else {
             return new MessageFieldGenerator(descriptor, presenceIndex, options);
@@ -526,7 +532,7 @@ FieldGeneratorBase* CreateFieldGenerator(const FieldDescriptor* descriptor,
       if (descriptor->is_repeated()) {
         return new RepeatedEnumFieldGenerator(descriptor, presenceIndex, options);
       } else {
-        if (descriptor->containing_oneof()) {
+        if (descriptor->real_containing_oneof()) {
           return new EnumOneofFieldGenerator(descriptor, presenceIndex, options);
         } else {
           return new EnumFieldGenerator(descriptor, presenceIndex, options);
@@ -536,7 +542,7 @@ FieldGeneratorBase* CreateFieldGenerator(const FieldDescriptor* descriptor,
       if (descriptor->is_repeated()) {
         return new RepeatedPrimitiveFieldGenerator(descriptor, presenceIndex, options);
       } else {
-        if (descriptor->containing_oneof()) {
+        if (descriptor->real_containing_oneof()) {
           return new PrimitiveOneofFieldGenerator(descriptor, presenceIndex, options);
         } else {
           return new PrimitiveFieldGenerator(descriptor, presenceIndex, options);

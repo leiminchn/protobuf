@@ -13,13 +13,13 @@ Environment Setup
 
 Open the appropriate *Command Prompt* from the *Start* menu.
 
-For example *VS2013 x64 Native Tools Command Prompt*:
+For example *x86 Native Tools Command Prompt for VS 2019*:
 
-    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64>
+    C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional>
 
 Change to your working directory:
 
-    C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64>cd C:\Path\to
+    C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional>cd C:\Path\to
     C:\Path\to>
 
 Where *C:\Path\to* is path to your real working directory.
@@ -66,7 +66,7 @@ Remember to update any submodules if you are using git clone (you can skip this
 step if you are using a release .tar.gz or .zip package):
 
 ```console
-C:\Path\to> git submodule update --init --recursive
+C:\Path\to\protobuf> git submodule update --init --recursive
 ```
 
 Now go to *cmake* folder in protobuf sources:
@@ -121,7 +121,7 @@ It will generate *nmake* *Makefile* in current directory.
 To create *Visual Studio* solution file:
 
      C:\Path\to\protobuf\cmake\build>mkdir solution & cd solution
-     C:\Path\to\protobuf\cmake\build\solution>cmake -G "Visual Studio 14 2015 Win64" ^
+     C:\Path\to\protobuf\cmake\build\solution>cmake -G "Visual Studio 16 2019" ^
      -DCMAKE_INSTALL_PREFIX=../../../../install ^
      ../..
 
@@ -130,8 +130,8 @@ It will generate *Visual Studio* solution file *protobuf.sln* in current directo
 If the *gmock* directory does not exist, and you do not want to build protobuf unit tests,
 you need to add *cmake* command argument `-Dprotobuf_BUILD_TESTS=OFF` to disable testing.
 
-To make a *Visual Studio* file for Visual Studio 15 2017, create the *Visual Studio*
-solution file above and edit the CmakeCache file.
+To make a *Visual Studio* file for Visual Studio 16 2019, create the *Visual Studio*
+solution file above and edit the CMakeCache file.
 
 	C:Path\to\protobuf\cmake\build\solution\CMakeCache
 

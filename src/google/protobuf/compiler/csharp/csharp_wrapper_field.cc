@@ -81,7 +81,7 @@ void WrapperFieldGenerator::GenerateMembers(io::Printer* printer) {
     "    $name$_ = value;\n"
     "  }\n"
     "}\n\n");
-  if (IsProto2(descriptor_->file())) {
+  if (SupportsPresenceApi(descriptor_)) {
     printer->Print(
       variables_,
       "/// <summary>Gets whether the $descriptor_name$ field is set</summary>\n");
@@ -114,12 +114,21 @@ void WrapperFieldGenerator::GenerateMergingCode(io::Printer* printer) {
 }
 
 void WrapperFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  GenerateParsingCode(printer, true);
+}
+
+void WrapperFieldGenerator::GenerateParsingCode(io::Printer* printer, bool use_parse_context) {
   printer->Print(
     variables_,
-    "$type_name$ value = _single_$name$_codec.Read(input);\n"
-    "if ($has_not_property_check$ || value != $default_value$) {\n"
-    "  $property_name$ = value;\n"
-    "}\n");
+    use_parse_context
+    ? "$type_name$ value = _single_$name$_codec.Read(ref input);\n"
+      "if ($has_not_property_check$ || value != $default_value$) {\n"
+      "  $property_name$ = value;\n"
+      "}\n"
+    : "$type_name$ value = _single_$name$_codec.Read(input);\n"
+      "if ($has_not_property_check$ || value != $default_value$) {\n"
+      "  $property_name$ = value;\n"
+      "}\n");
 }
 
 void WrapperFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
@@ -219,7 +228,7 @@ void WrapperOneofFieldGenerator::GenerateMembers(io::Printer* printer) {
     "    $oneof_name$Case_ = value == null ? $oneof_property_name$OneofCase.None : $oneof_property_name$OneofCase.$property_name$;\n"
     "  }\n"
     "}\n");
-  if (IsProto2(descriptor_->file())) {
+  if (SupportsPresenceApi(descriptor_)) {
     printer->Print(
       variables_,
       "/// <summary>Gets whether the \"$descriptor_name$\" field is set</summary>\n");
@@ -248,9 +257,15 @@ void WrapperOneofFieldGenerator::GenerateMergingCode(io::Printer* printer) {
 }
 
 void WrapperOneofFieldGenerator::GenerateParsingCode(io::Printer* printer) {
+  GenerateParsingCode(printer, true);
+}
+
+void WrapperOneofFieldGenerator::GenerateParsingCode(io::Printer* printer, bool use_parse_context) {
   printer->Print(
     variables_,
-    "$property_name$ = _oneof_$name$_codec.Read(input);\n");
+    use_parse_context
+    ? "$property_name$ = _oneof_$name$_codec.Read(ref input);\n"
+    : "$property_name$ = _oneof_$name$_codec.Read(input);\n");
 }
 
 void WrapperOneofFieldGenerator::GenerateSerializationCode(io::Printer* printer) {
